@@ -35,7 +35,7 @@ module i2c_master (
   logic sda_out, sda_reg;               // FSM variable SDA, register SDA
   logic scl_out, scl_reg;               // FSM variable SCL, register SCL
   logic data_phase;                     // FSM variable to check if in state data1, data2, data3, or data4
-  logic data_tick_i;                    // FSM varible asserted for one cycle post controller completion
+  logic done_tick_i;                    // FSM varible asserted for one cycle post controller completion
   logic ready_i;                        // FSM variable indicates if state is idle and hold
   logic into;                           // Detect if the data flows into the controller
   logic nack;                           // LSB of din acknowledge bit
@@ -53,7 +53,7 @@ module i2c_master (
 
   assign scl = (scl_reg) ? 1'bz : 1'b0;
   assign into = (data_phase && cmd_reg == RD_CMD && bit_reg < 8) || 
-                (data_phase && cmd_reg == WD_CMD && bit_reg == 8);
+                (data_phase && cmd_reg == WR_CMD && bit_reg == 8);
 
   assign sda = (into || sda_reg) ? 1'bz : 1'b0;
   assign dout = rx_reg[8:1];
@@ -88,7 +88,7 @@ module i2c_master (
     c_next = c_reg + 1;
     bit_next = bit_reg;
     tx_next = tx_reg;
-    tx_next = tx_reg;
+    rx_next = rx_reg;
     cmd_next = cmd_reg;
     done_tick_i = 1'b0;
     ready_i = 1'b0;
@@ -112,8 +112,8 @@ module i2c_master (
       end
       start2: begin
         sda_out = 1'b0;
-        sck_out = 1'b0;
-        if (c_reg == qutr) begin
+        scl_out = 1'b0;
+        if (c_reg == half) begin
           c_next = 0;
           state_next = hold;
         end
@@ -121,7 +121,7 @@ module i2c_master (
       hold: begin
         ready_i = 1'b1;
         sda_out = 1'b0;
-        sck_out = 1'b0;
+        scl_out = 1'b0;
         if (wr_i2c) begin
           cmd_next = cmd;
           c_next   = 0;
