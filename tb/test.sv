@@ -14,6 +14,8 @@ module test (i2c_if.dvr vif);
     write(8'd11);
     write(8'd12);
     stop();
+    start();
+    restart();
     $display("End Of Simulation.");
     $finish;
   end
@@ -30,10 +32,10 @@ module test (i2c_if.dvr vif);
   endtask : reset
 
   task start();
-    vif.cb.cmd    <= START_CMD;   // START_CMD
+    vif.cb.cmd    <= START_CMD;  
     vif.cb.wr_i2c <= 1'b1;        // Start write
     @(vif.cb);
-    vif.cb.wr_i2c <= 1'b0;       // Deassert
+    vif.cb.wr_i2c <= 1'b0;        // Deassert
     wait(vif.cb.ready != 0);
     @(vif.cb iff( vif.cb.ready == 1 ) );
     @(vif.cb);
@@ -41,7 +43,7 @@ module test (i2c_if.dvr vif);
 
   task write(input logic [7:0] value);
     vif.cb.din    <= value;    // Default din value
-    vif.cb.cmd    <= WR_CMD;   // WR_CMD
+    vif.cb.cmd    <= WR_CMD;
     vif.cb.wr_i2c <= 1'b1;     // Start write
     @(vif.cb);
     vif.cb.wr_i2c <= 1'b0;     // Deassert
@@ -51,7 +53,7 @@ module test (i2c_if.dvr vif);
   endtask : write
   
   task stop();
-    vif.cb.cmd    <= STOP_CMD;   // WR_CMD
+    vif.cb.cmd    <= STOP_CMD;
     vif.cb.wr_i2c <= 1'b1;     // Start write
     @(vif.cb);
     vif.cb.wr_i2c <= 1'b0;     // Deassert
@@ -59,5 +61,15 @@ module test (i2c_if.dvr vif);
     @(vif.cb iff( vif.cb.ready == 1 ) );
     @(vif.cb);
   endtask : stop
-
+  
+  task restart();
+    vif.cb.cmd    <= RESTART_CMD;
+    vif.cb.wr_i2c <= 1'b1;     // Start write
+    @(vif.cb);
+    vif.cb.wr_i2c <= 1'b0;     // Deassert
+    wait(vif.cb.ready != 0);
+    @(vif.cb iff( vif.cb.ready == 1 ) );
+    @(vif.cb);
+  endtask : restart
+  
 endmodule : test
