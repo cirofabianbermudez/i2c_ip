@@ -203,7 +203,12 @@ module i2c_master (
           state_next = stop2;
         end
       end
-      default: begin // stop2
+      stop2: begin // stop2
+        if (c_reg == half) begin
+          state_next = idle;
+        end
+      end
+      default: begin
         if (c_reg == half) begin
           state_next = idle;
         end
