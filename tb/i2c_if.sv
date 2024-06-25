@@ -13,6 +13,10 @@ interface i2c_if(
   logic        done_tick;
   logic        ack;
   logic [ 7:0] dout;
+  
+  // https://prbs23.com/blog/posts/drive-strength-detection-in-system-verilog/
+  assign (pull1, highz0) scl = 1'b1;
+  assign (pull1, highz0) sda = 1'b1;
 
   clocking cb @(posedge clk);
     default input #1ns output #1ns;

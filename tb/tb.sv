@@ -12,6 +12,8 @@ module tb;
 
   // Test
   test top_test(vif);
+  //pullup(vif.scl);
+  //pullup(vif.sda);
 
   // Instantiation
   i2c_master dut (
