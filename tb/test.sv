@@ -15,8 +15,8 @@ module test (
       begin
         reset();
         start();
-        write(8'hfa);
-        write(8'd12);
+        write(8'hfa);  // Write address
+        write(8'd12);  // 
         stop();
         start();
         write(8'hfa);
@@ -133,8 +133,17 @@ module test (
 
       end
 
-
     end
   endtask : check_start
+  
+  task read();
+    vif.cb.cmd_i    <= RD_CMD;
+    vif.cb.wr_i2c_i <= 1'b1;     // Start write
+    @(vif.cb);
+    vif.cb.wr_i2c_i <= 1'b0;  // Deassert
+    wait (vif.cb.ready_o != 0);
+    @(vif.cb iff (vif.cb.ready_o == 1));
+    @(vif.cb);
+  endtask : read
 
 endmodule : test
