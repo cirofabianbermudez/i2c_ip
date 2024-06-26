@@ -19,7 +19,7 @@ interface i2c_if(
   assign (pull1, highz0) sda_io = 1'b1;
 
   clocking cb @(posedge clk_i);
-    default input #1ns output #1ns;
+    default input #1ns output #5ns;
     output rst_i;
     output din_i;
     output dvsr_i;
