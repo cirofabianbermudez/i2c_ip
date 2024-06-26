@@ -1,0 +1,37 @@
+
+
+{ 
+  signal: [
+
+   //{ name: 'clk', wave: 'p............................', period: 1},
+   { name: 'sda', wave: '1.0...3...3...3...3...3...3...3...4...9...5...5...5...5...5...5...5...5...9...5...5...5...5...5...5...5...5...9...', 
+    data: ['A6', 'A5', 'A4', 'A3', 'A2', 'A1', 'A0', 'W/R', 'ACK', 'D7', 'D6', 'D5', 'D4', 'D3', 'D2', 'D1', 'D0', 'ACK', 'D7', 'D6', 'D5', 'D4', 'D3', 'D2', 'D1', 'D0', 'ACK'],},
+   { name: 'scl', wave: '1...0..1.0.1.0.1.0.1.0.1.0.1.0.1.0.1.0.1.0.1.0.1.0.1.0.1.0.1.0.1.0.1.0.1.0.1.0.1.0.1.0.1.0.1.0.1.0.1.0.1.0.1.0.1.0', data: ['0x00']},
+   {                              node: '..A...B',  phase:0 },
+   //{ name: 'state', wave: '=.=.=.========================================', 
+   //  data: ['idle', 'start1', 'start2', 'data1', 'data2', 'data3', 'data4', 'data1', 'data2', 'data3', 'data4','data1', 'data2', 'data3', 'data4', 'data1', 'data2', 'data3', 'data4', 'data1', 'data2', 'data3', 'data4', 'data1', 'data2', 'data3', 'data4', 'data1', 'data2', 'data3', 'data4', 'data1', 'data2', 'data3', 'data4']},
+   {                              node: '......C...D',  phase:0 },
+   {                              node: '......E...F',  phase:0 },
+   {},
+   {},
+],
+    
+    edge: ['A+B I2C Period', 'C+D I2C Period'],
+ head: {
+     text: 'I2C FPGA implementation diagram',
+     //tock: 0,
+     //tick: 0,
+     //every: 1,
+ },
+ foot:{
+     //text: 'Figure: 100',
+     //tick: '0 1',
+ },
+ config: {
+   skin: 'narrow',
+   //hscale: 2,
+   vspace: 500,
+   }
+
+
+}
