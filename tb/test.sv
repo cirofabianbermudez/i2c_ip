@@ -2,11 +2,11 @@ module test (
     i2c_if.dvr vif
 );
 
-  localparam Divisor = 10'd20;
-  localparam START_CMD = 3'b000;
-  localparam WR_CMD = 3'b001;
-  localparam RD_CMD = 3'b010;
-  localparam STOP_CMD = 3'b011;
+  localparam Divisor     = 10'd20;
+  localparam START_CMD   = 3'b000;
+  localparam WR_CMD      = 3'b001;
+  localparam RD_CMD      = 3'b010;
+  localparam STOP_CMD    = 3'b011;
   localparam RESTART_CMD = 3'b100;
 
   initial begin
@@ -35,21 +35,21 @@ module test (
   end
 
   task reset();
-    vif.rst_i  = 1'b1;  // Assert async reset
-    vif.dvsr_i = Divisor;  // 20 clock cycles
-    vif.cb.din_i    <= 8'd10;  // Default din_i value
+    vif.rst_i       = 1'b1;      // Assert async reset
+    vif.dvsr_i      = Divisor;   // 20 clock cycles
+    vif.cb.din_i    <= 8'd10;    // Default din_i value
     vif.cb.cmd_i    <= START_CMD;
-    vif.cb.wr_i2c_i <= 1'b0;  // Default wr
+    vif.cb.wr_i2c_i <= 1'b0;
     repeat (2) @(vif.cb);
-    vif.cb.rst_i <= 1'b0;  // Deassert reset
+    vif.cb.rst_i <= 1'b0;        // Deassert reset
     repeat ((Divisor + 1) * 4) @(vif.cb);
   endtask : reset
 
   task start();
     vif.cb.cmd_i    <= START_CMD;
-    vif.cb.wr_i2c_i <= 1'b1;  // Start write
+    vif.cb.wr_i2c_i <= 1'b1;     // Start write
     @(vif.cb);
-    vif.cb.wr_i2c_i <= 1'b0;  // Deassert
+    vif.cb.wr_i2c_i <= 1'b0;     // Deassert
     wait (vif.cb.ready_o != 0);
     @(vif.cb iff (vif.cb.ready_o == 1));
     @(vif.cb);
