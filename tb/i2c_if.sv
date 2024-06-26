@@ -1,39 +1,39 @@
 interface i2c_if(
-  input logic clk
+  input logic clk_i
 );
 
-  logic        rst;
-  logic [ 7:0] din;
-  logic [15:0] dvsr;
-  logic [ 2:0] cmd;
-  logic        wr_i2c;
-  wire          scl;
-  wire          sda;
-  logic        ready;
-  logic        done_tick;
-  logic        ack;
-  logic [ 7:0] dout;
-  
-  // https://prbs23.com/blog/posts/drive-strength-detection-in-system-verilog/
-  assign (pull1, highz0) scl = 1'b1;
-  assign (pull1, highz0) sda = 1'b1;
+  logic        rst_i;
+  logic [ 7:0] din_i;
+  logic [15:0] dvsr_i;
+  logic [ 2:0] cmd_i;
+  logic        wr_i2c_i;
+  wire         scl_io;
+  wire         sda_io;
+  logic        ready_o;
+  logic        done_tick_o;
+  logic        ack_o;
+  logic [ 7:0] dout_o;
 
-  clocking cb @(posedge clk);
+  // https://prbs23.com/blog/posts/drive-strength-detection-in-system-verilog/
+  assign (pull1, highz0) scl_io = 1'b1;
+  assign (pull1, highz0) sda_io = 1'b1;
+
+  clocking cb @(posedge clk_i);
     default input #1ns output #1ns;
-    output rst;
-    output din;
-    output dvsr;
-    output cmd;
-    output wr_i2c;
-    inout  scl;
-    inout  sda;
-    input  ready;
-    input  done_tick;
-    input  ack;
-    input  dout;
+    output rst_i;
+    output din_i;
+    output dvsr_i;
+    output cmd_i;
+    output wr_i2c_i;
+    inout  scl_io;
+    inout  sda_io;
+    input  ready_o;
+    input  done_tick_o;
+    input  ack_o;
+    input  dout_o;
   endclocking : cb
 
-  modport dvr (clocking cb, output rst, output dvsr);
+  modport dvr (clocking cb, output rst_i, output dvsr_i);
 
 endinterface : i2c_if
 
